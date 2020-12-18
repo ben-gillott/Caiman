@@ -1,0 +1,68 @@
+#ifndef GRAYSCALE_INCLUDED
+#define GRAYSCALE_INCLUDED
+
+// #"precision mediump float;";
+// using "../glsl_defs.lgl";
+// // Reference Frame Declarations
+// frame model has dimension 3;
+// frame world has dimension 3;
+// frame camera has dimension 3;
+
+varying vec3 vPosition;
+uniform mat4 uModel;
+uniform mat4 uView;
+varying vec3 vNormal;
+uniform vec3 uLight;
+uniform float uRef;
+
+void main() {
+    vec3 ambient = [.1, 0., 0.];
+    vec3 diffColor = [0.2, 0.8, 0.4];
+    vec3 specColor = [1.0, 1.0, 1.0];
+    // Correct phong model for reference
+    if (uRef == 1.) {
+        mat3 modelMatrix = mat3(uModel);
+
+        vec3 worldPos = vec3(uModel * vec4(-vPosition, 1.));
+        vec3 worldNorm = vec3(uModel * vec4(vNormal, 0.));
+
+        vec3 lightDir = normalize(uLight - worldPos);
+        float lightWorldDot = dot(lightDir, worldNorm);
+        float diffuse = max(lightWorldDot, 0.);
+
+        vec3 camPos = vec3(uView*vec4(worldPos, 1.));
+
+        vec3 reflectDir = vec3(uView*vec4(reflect(-lightDir, worldNorm), 0.));
+
+        float specular = pow(max(dot(normalize(-camPos), reflectDir), 0.), 32.);
+        gl_FragColor = vec4(ambient + diffuse * diffColor + specular * specColor, 1.);
+    }
+
+    // Example phong model with errors
+    else {        
+        mat3 modelMatrix = mat3(uModel);
+        //vec3 worldPos = modelMatrix * vPosition;
+        //vec3 worldNorm = modelMatrix * vNormal;
+
+        //vec3 worldPos = vec3(uModel * vec4(vPosition, 1.));
+        //vec3 worldNorm = vec3(uModel * vec4(vNormal, 1.));
+        // Uncomment for failing example
+        vec3 worldPos = vPosition;
+        vec3 worldNorm = vNormal;
+
+        vec3 lightDir = normalize(uLight - worldPos);
+        float lightWorldDot = dot(lightDir, worldNorm);
+        float diffuse = max(lightWorldDot, 0.);
+
+        vec3 camPos = vec3(uView*vec4(worldPos, 1.));
+
+        vec3 reflectDir = vec3(uView*vec4(reflect(-lightDir, worldNorm), 0.));
+
+        float specular = pow(max(dot(normalize(-camPos), reflectDir), 0.), 32.);
+        gl_FragColor = vec4(ambient + diffuse * diffColor + specular * specColor, 1.0);
+        // gl_FragColor = vec4(ambient + diffuse * diffColor, 1.0);
+    }
+}
+
+
+#endif

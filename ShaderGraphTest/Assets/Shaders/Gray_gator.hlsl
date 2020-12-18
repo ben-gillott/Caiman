@@ -97,23 +97,16 @@ float4x4 _gator_plus_14(float4x4 m1, float4x4 m2){return (m1+m2);}
 
 float4x4 _gator_times_19(float4x4 m2, float4x4 m1){return (m2*m1);}
 
+float4 homify(float3 v){return float4(v[0], v[1], v[2], 1.);}
 
-// float4 homify(float3 v){return float4(v, 1.);}
-float4 homify(float3 v){return float4(v.x, v.y, v.z, 1.);}
+float4 homify_1(float3 v){return float4(v[0], v[1], v[2], 0.);}
 
-// float4 homify_1(float3 v){return float4(v, 0.);}
-float4 homify_1(float3 v){return float4(v.x, v.y, v.z, 0.);}
+float4 homify_2(float3 v){return float4(v[0], v[1], v[2], 0.);}
 
-// float4 homify_2(float3 v){return float4(v, 0.);}
-float4 homify_2(float3 v){return float4(v.x, v.y, v.z, 0.);}
+float3 hom_reduce(float4 v){return float3((v[0]/v[3]), (v[1]/v[3]), (v[2]/v[3]));}
 
-// float3 hom_reduce(float4 v){return (float3(v)/v[3]);}
-float3 hom_reduce(float4 v){return float3(v.x/v.w, v.y/v.w, v.z/v.w);}
+float3 hom_reduce_1(float4 v){return float3(v[0], v[1], v[2]);}
 
-// float3 hom_reduce_1(float4 v){return float3(v);}
-float3 hom_reduce_1(float4 v){return float3(v.x, v.y, v.z);}
-
-//After update
 void Grayscale_float(float3 inp, out float result){float r = inp[0];float g = inp[1];float b = inp[2];result = (((r+g)+b)*0.33);}
 
 #endif
