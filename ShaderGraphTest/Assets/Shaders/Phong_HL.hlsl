@@ -1,7 +1,7 @@
-// #ifndef PHONG_INCLUDED
-// #define PHONG_INCLUDED
+#ifndef PHONG_INCLUDED
+#define PHONG_INCLUDED
 
-void main(float3 vPosition, float4x4 uModel, float4x4 uView, float3 vNormal, float3 uLight, float uRef, float4 output) {
+void Phong_float(float3 vPosition, float4x4 uModel, float4x4 uView, float3 vNormal, float3 uLight, float uRef, float4 output) {
     float3 ambient = {.1, 0., 0.};
     float3 diffColor = {0.2, 0.8, 0.4};
     float3 specColor = {1.0, 1.0, 1.0};
@@ -28,6 +28,7 @@ void main(float3 vPosition, float4x4 uModel, float4x4 uView, float3 vNormal, flo
     float specular = pow(max(dot(normalize(-camPos), reflectDir), 0.0), 32.0);
 
     float4 gl_FragColor = float4(ambient + mul(diffuse, diffColor) + mul(specular, specColor), 1.0);
+    output = gl_FragColor;
 }
 
-// #endif
+#endif
